@@ -34,12 +34,16 @@
             this.pbQR = new System.Windows.Forms.PictureBox();
             this.textQR = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textAgr = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textSN = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbQR)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGenerate
             // 
-            this.btnGenerate.Location = new System.Drawing.Point(235, 243);
+            this.btnGenerate.Location = new System.Drawing.Point(352, 231);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(108, 24);
             this.btnGenerate.TabIndex = 0;
@@ -49,7 +53,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(349, 243);
+            this.btnSave.Location = new System.Drawing.Point(475, 231);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(110, 24);
             this.btnSave.TabIndex = 1;
@@ -64,14 +68,14 @@
             this.pbQR.InitialImage = null;
             this.pbQR.Location = new System.Drawing.Point(235, 12);
             this.pbQR.Name = "pbQR";
-            this.pbQR.Size = new System.Drawing.Size(225, 225);
+            this.pbQR.Size = new System.Drawing.Size(350, 200);
             this.pbQR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbQR.TabIndex = 2;
             this.pbQR.TabStop = false;
             // 
             // textQR
             // 
-            this.textQR.Location = new System.Drawing.Point(12, 35);
+            this.textQR.Location = new System.Drawing.Point(12, 151);
             this.textQR.Name = "textQR";
             this.textQR.Size = new System.Drawing.Size(181, 20);
             this.textQR.TabIndex = 3;
@@ -79,17 +83,53 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 12);
+            this.label1.Location = new System.Drawing.Point(12, 128);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(136, 13);
+            this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 4;
-            this.label1.Text = "Текст для генерации QR:";
+            this.label1.Text = "Ссылка";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(74, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Тип агрегата";
+            // 
+            // textAgr
+            // 
+            this.textAgr.Location = new System.Drawing.Point(12, 32);
+            this.textAgr.Name = "textAgr";
+            this.textAgr.Size = new System.Drawing.Size(181, 20);
+            this.textAgr.TabIndex = 5;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 69);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(93, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Серийный номер";
+            // 
+            // textSN
+            // 
+            this.textSN.Location = new System.Drawing.Point(12, 92);
+            this.textSN.Name = "textSN";
+            this.textSN.Size = new System.Drawing.Size(181, 20);
+            this.textSN.TabIndex = 7;
             // 
             // QRCodeDesktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(471, 275);
+            this.ClientSize = new System.Drawing.Size(592, 267);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.textSN);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.textAgr);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textQR);
             this.Controls.Add(this.pbQR);
@@ -112,6 +152,10 @@
         private System.Windows.Forms.PictureBox pbQR;
         private System.Windows.Forms.TextBox textQR;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textAgr;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textSN;
     }
 }
 
