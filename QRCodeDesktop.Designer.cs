@@ -38,12 +38,17 @@
             this.textAgr = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textSN = new System.Windows.Forms.TextBox();
+            this.tbImageSize = new System.Windows.Forms.TrackBar();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbQR)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbImageSize)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGenerate
             // 
-            this.btnGenerate.Location = new System.Drawing.Point(352, 231);
+            this.btnGenerate.Location = new System.Drawing.Point(352, 234);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(108, 24);
             this.btnGenerate.TabIndex = 0;
@@ -53,7 +58,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(475, 231);
+            this.btnSave.Location = new System.Drawing.Point(475, 234);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(110, 24);
             this.btnSave.TabIndex = 1;
@@ -121,11 +126,55 @@
             this.textSN.Size = new System.Drawing.Size(181, 20);
             this.textSN.TabIndex = 7;
             // 
+            // tbImageSize
+            // 
+            this.tbImageSize.LargeChange = 1;
+            this.tbImageSize.Location = new System.Drawing.Point(12, 210);
+            this.tbImageSize.Maximum = 5;
+            this.tbImageSize.Minimum = 1;
+            this.tbImageSize.Name = "tbImageSize";
+            this.tbImageSize.Size = new System.Drawing.Size(181, 45);
+            this.tbImageSize.TabIndex = 9;
+            this.tbImageSize.Value = 1;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 194);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(117, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Размер изображения";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(9, 245);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(48, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "700х400";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(134, 245);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(60, 13);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "3500х2000";
+            // 
             // QRCodeDesktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(592, 267);
+            this.ClientSize = new System.Drawing.Size(598, 270);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.tbImageSize);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textSN);
             this.Controls.Add(this.label2);
@@ -140,6 +189,7 @@
             this.Name = "QRCodeDesktop";
             this.Text = "Генератор QR кодов";
             ((System.ComponentModel.ISupportInitialize)(this.pbQR)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbImageSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,6 +206,10 @@
         private System.Windows.Forms.TextBox textAgr;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textSN;
+        private System.Windows.Forms.TrackBar tbImageSize;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
     }
 }
 
