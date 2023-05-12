@@ -84,7 +84,7 @@ namespace QRCodeXLS
                     gFrame.Dispose();
                 }
 
-                imgFrame.Tag = nameAgr + "_" + sn;
+                imgFrame.Tag = string.Format("{0}_{1}", nameAgr, sn);
                 return imgFrame;
             }
         }
