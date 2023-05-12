@@ -6,13 +6,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{78C255F6-18F1-4418-BAA2-EE6EF4A7CD7F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>QRCodeDesktop</RootNamespace>
-    <AssemblyName>QRCodeDesktop</AssemblyName>
+    <RootNamespace>QRCodeXLS</RootNamespace>
+    <AssemblyName>QRCodeXLS</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,7 +26,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -54,6 +54,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,14 +67,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers.cs" />
-    <Compile Include="QRCodeDesktop.cs">
+    <Compile Include="QRCodeXLS.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QRCodeDesktop.Designer.cs">
-      <DependentUpon>QRCodeDesktop.cs</DependentUpon>
+    <Compile Include="QRCodeXLS.Designer.cs">
+      <DependentUpon>QRCodeXLS.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QRString.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -84,8 +86,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="QRCodeDesktop.resx">
-      <DependentUpon>QRCodeDesktop.cs</DependentUpon>
+    <EmbeddedResource Include="QRCodeXLS.resx">
+      <DependentUpon>QRCodeXLS.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -101,6 +103,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ExcelLibrary">
+      <Version>1.2011.7.31</Version>
+    </PackageReference>
     <PackageReference Include="QRCoder">
       <Version>1.4.3</Version>
     </PackageReference>

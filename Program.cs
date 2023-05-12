@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QRCodeXLS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace QRCodeDesktop
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new QRCodeDesktop());
+            Application.Run(new QRCodeXLSClass());
         }
     }
 }
