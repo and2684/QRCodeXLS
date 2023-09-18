@@ -49,10 +49,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icons8-Windows-8-Ecommerce-Qr-Code.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Icons8-Windows-8-Ecommerce-Qr-Code.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
@@ -66,7 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers.cs" />
+    <Compile Include="Config\ImageConfig.cs" />
+    <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="QRCodeXLS.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,7 +77,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QRString.cs" />
+    <Compile Include="Model\QRString.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -100,19 +102,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Config\App.config" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ExcelLibrary">
       <Version>1.2011.7.31</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="QRCoder">
       <Version>1.4.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icons8-Windows-8-Ecommerce-Qr-Code.ico" />
-    <Content Include="Martz90-Circle-Qr-code.ico" />
+    <Content Include="Resources\Icons8-Windows-8-Ecommerce-Qr-Code.ico" />
+    <Content Include="Resources\Martz90-Circle-Qr-code.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -126,5 +131,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
