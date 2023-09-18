@@ -1,12 +1,10 @@
 ﻿using ExcelLibrary.SpreadSheet;
-using Newtonsoft.Json;
 using QRCoder;
 using QRCodeXLS.Config;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace QRCodeXLS

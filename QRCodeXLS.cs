@@ -5,7 +5,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using QRCodeXLS.Config;
 
 namespace QRCodeXLS
 {
