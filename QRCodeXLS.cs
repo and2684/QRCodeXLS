@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QRCodeXLS
@@ -36,12 +37,13 @@ namespace QRCodeXLS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("Не удалось выбрать файл.\nПричина:\n{0}",ex.Message),
+                MessageBox.Show("Не удалось выбрать файл.\n" +
+                                $"Причина:{ex.Message}",
                                 "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void btnGenerate_Click(object sender, EventArgs e)
+        private async void btnGenerate_Click(object sender, EventArgs e)
         {
             var QRList = new List<QRString>();
             try
@@ -57,7 +59,7 @@ namespace QRCodeXLS
                         Directory.CreateDirectory(folderPath);
 
                         Helpers.ReadExcel(XLSPath, QRList); // Читаем эксель
-                        Refresh();
+                        //Refresh();
 
                         if (QRList.Count > 0)
                         {
@@ -65,14 +67,21 @@ namespace QRCodeXLS
                             pBar.Maximum = QRList.Count;
                             pBar.Value = 1;
 
+                            var tasks = new List<Task>();
                             foreach (var QR in QRList) // Генерируем картинки
                             {
-                                using (var img = Helpers.GenerateImage(QR.NameAgr, QR.SerialNumber, QR.URL))
-                                    img.Save(Path.Combine(folderPath, string.Format("{0}.gif", img.Tag.ToString())), ImageFormat.Gif);
-                                pBar.PerformStep();
+                                var task = Task.Run(async () =>
+                                {
+                                    using (var img = await Helpers.GenerateImageAsync(QR.NameAgr, QR.SerialNumber, QR.URL))
+                                        img.Save(Path.Combine(folderPath, $"{img.Tag}.gif"), ImageFormat.Gif);
+                                    Invoke((MethodInvoker) delegate { pBar.PerformStep(); }); // Выполняет движение по прогрессбару в UI-потоке
+                                });
+                                tasks.Add(task);
                             }
 
-                            MessageBox.Show(string.Format("В каталог {0} сохранено {1} файлов.", folderPath, Directory.GetFiles(folderPath).Length),
+                            await Task.WhenAll(tasks);
+
+                            MessageBox.Show($"В каталог {folderPath} сохранено {Directory.GetFiles(folderPath).Length} файлов.",
                                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                             pBar.Value = 0;
                             Process.Start(new ProcessStartInfo("explorer.exe", folderPath)); // Открыть папку в эксплорере
@@ -82,7 +91,8 @@ namespace QRCodeXLS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("Ошибка при сохранении изображений этикеток!\nПричина:\n{2}", Environment.NewLine, Environment.NewLine, ex.Message),
+                MessageBox.Show("Ошибка при сохранении изображений этикеток!\n" +
+                                $"Причина: {ex.Message}", 
                                 "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
