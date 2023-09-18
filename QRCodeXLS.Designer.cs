@@ -42,7 +42,8 @@
             this.tbXLSPath.Name = "tbXLSPath";
             this.tbXLSPath.ReadOnly = true;
             this.tbXLSPath.Size = new System.Drawing.Size(218, 20);
-            this.tbXLSPath.TabIndex = 9999;
+            this.tbXLSPath.TabIndex = 0;
+            this.tbXLSPath.TabStop = false;
             this.tbXLSPath.Text = "Выберите XLS-файл";
             // 
             // btnGetXLS

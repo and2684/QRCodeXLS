@@ -59,7 +59,6 @@ namespace QRCodeXLS
                         Directory.CreateDirectory(folderPath);
 
                         Helpers.ReadExcel(XLSPath, QRList); // Читаем эксель
-                        //Refresh();
 
                         if (QRList.Count > 0)
                         {

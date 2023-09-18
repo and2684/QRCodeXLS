@@ -1,6 +1,4 @@
-﻿using ExcelLibrary.BinaryFileFormat;
-using ExcelLibrary.SpreadSheet;
-using System;
+﻿using ExcelLibrary.SpreadSheet;
 
 namespace QRCodeXLS
 {
