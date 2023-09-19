@@ -4,9 +4,9 @@ namespace QRCodeXLS
 {
     public class QRString
     {
-        private string nameAgr = string.Empty;
-        private string serialNumber = string.Empty;
-        private string url = string.Empty;
+        private string nameAgr;
+        private string serialNumber;
+        private string url;
 
         public string NameAgr { get => nameAgr; set => nameAgr = value; }
         public string SerialNumber { get => serialNumber; set => serialNumber = value; }
