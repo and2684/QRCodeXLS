@@ -72,7 +72,8 @@ namespace QRCodeXLS
                                 var task = Task.Run(async () =>
                                 {
                                     using (var img = await Helpers.GenerateImageAsync(QR.NameAgr, QR.SerialNumber, QR.URL))
-                                        img.Save(Path.Combine(folderPath, $"{img.Tag}.gif"), ImageFormat.Gif);
+                                        //img.Save(Path.Combine(folderPath, $"{img.Tag}.gif"), ImageFormat.Gif);
+                                        img.Save(Path.Combine(folderPath, $"{img.Tag}.jpg"), ImageFormat.Jpeg);
                                     Invoke((MethodInvoker) delegate { pBar.PerformStep(); }); // Выполняет движение по прогрессбару в UI-потоке
                                 });
                                 tasks.Add(task);

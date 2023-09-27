@@ -28,21 +28,22 @@ namespace QRCodeXLS
         {
             var config = LoadConfigValues();
 
-            var ImageWidth = config.ImageWidth;
-            var ImageHeight = config.ImageHeight;
+            var SizeMultiplyer = config.SizeMultiplyer;
+            var ImageWidth = config.ImageWidth * SizeMultiplyer;
+            var ImageHeight = config.ImageHeight * SizeMultiplyer;
             var QRCodeSize = config.QRCodeSize;
-            var QRCodeX = config.QRCodeX;
-            var QRCodeY = config.QRCodeY;
-            var QRCodeWidth = config.QRCodeWidth;
-            var QRCodeHeight = config.QRCodeHeight;
-            var RectangleAgrX = config.RectangleAgrX;
-            var RectangleAgrY = config.RectangleAgrY;
-            var RectangleAgrWidth = config.RectangleAgrWidth;
-            var RectangleAgrHeight = config.RectangleAgrHeight;
-            var RectangleSNX = config.RectangleSNX;
-            var RectangleSNY = config.RectangleSNY;
-            var RectangleSNWidth = config.RectangleSNWidth;
-            var RectangleSNHeight = config.RectangleSNHeight;
+            var QRCodeX = config.QRCodeX * SizeMultiplyer;
+            var QRCodeY = config.QRCodeY * SizeMultiplyer;
+            var QRCodeWidth = config.QRCodeWidth * SizeMultiplyer;
+            var QRCodeHeight = config.QRCodeHeight * SizeMultiplyer;
+            var RectangleAgrX = config.RectangleAgrX * SizeMultiplyer;
+            var RectangleAgrY = config.RectangleAgrY * SizeMultiplyer;
+            var RectangleAgrWidth = config.RectangleAgrWidth * SizeMultiplyer;
+            var RectangleAgrHeight = config.RectangleAgrHeight * SizeMultiplyer;
+            var RectangleSNX = config.RectangleSNX * SizeMultiplyer;
+            var RectangleSNY = config.RectangleSNY * SizeMultiplyer;
+            var RectangleSNWidth = config.RectangleSNWidth * SizeMultiplyer;
+            var RectangleSNHeight = config.RectangleSNHeight * SizeMultiplyer;
 
             var qrGenerator = new QRCodeGenerator();
             var qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
@@ -53,8 +54,8 @@ namespace QRCodeXLS
 
                 Graphics.FromImage(imgFrame).FillRectangle(Brushes.White, 0, 0, imgFrame.Width, imgFrame.Height);
 
-                var drawFont = new Font("Arial", 20);
-                var drawFontBottom = new Font("Arial", 24, FontStyle.Bold);
+                var drawFont = new Font("Arial", 20 * SizeMultiplyer);
+                var drawFontBottom = new Font("Arial", 24 * SizeMultiplyer, FontStyle.Bold);
 
                 StringFormat drawFormat = StringFormat.GenericTypographic;
                 drawFormat.Alignment = StringAlignment.Center;
@@ -69,7 +70,7 @@ namespace QRCodeXLS
 
                 using (Bitmap bmImage = new Bitmap(qrImage))
                 {
-                    bmImage.SetResolution(ImageWidth * 10, ImageHeight * 10);
+                    bmImage.SetResolution(ImageWidth * 10 * SizeMultiplyer, ImageHeight * 10 * SizeMultiplyer);
 
                     using (Graphics gFrame = Graphics.FromImage(imgFrame))
                     {
@@ -78,8 +79,8 @@ namespace QRCodeXLS
                         gFrame.DrawString(sn, drawFontBottom, Brushes.Black, rectangleSN, drawFormat);
                         gFrame.DrawString("®", drawFontBottom, Brushes.Black, rectangleAgr, reservedRightsFormat);
 
-                        DrawFrame(Brushes.Black, 1, rectangleAgr, gFrame);
-                        DrawFrame(Brushes.Black, 1, rectangleSN, gFrame);
+                        DrawFrame(Brushes.Black, 1 * SizeMultiplyer, rectangleAgr, gFrame);
+                        DrawFrame(Brushes.Black, 1 * SizeMultiplyer, rectangleSN, gFrame);
                     }
                 }
 
@@ -118,6 +119,7 @@ namespace QRCodeXLS
         {
             ImageConfig config = new ImageConfig();
 
+            config.SizeMultiplyer = int.Parse(ConfigurationManager.AppSettings["SizeMultiplyer"]);
             config.ImageWidth = int.Parse(ConfigurationManager.AppSettings["ImageWidth"]);
             config.ImageHeight = int.Parse(ConfigurationManager.AppSettings["ImageHeight"]);
             config.QRCodeSize = int.Parse(ConfigurationManager.AppSettings["QRCodeSize"]);
