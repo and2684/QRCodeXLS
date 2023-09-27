@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QRCodeXLS.Model;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
@@ -57,13 +58,14 @@ namespace QRCodeXLS
                         // Создаем каталог куда будем складывать картинки
                         var folderPath = Path.Combine(dialog.SelectedPath, "QR_" + DateTime.Now.ToString("yyyyMMdd_hhmmss"));
                         Directory.CreateDirectory(folderPath);
+                        Directory.CreateDirectory(Path.Combine(folderPath, "svg"));
 
-                        Helpers.ReadExcel(XLSPath, QRList); // Читаем эксель
+                        Helpers.Helpers.ReadExcel(XLSPath, QRList); // Читаем эксель
 
                         if (QRList.Count > 0)
                         {
                             // Подготовим Прогрессбар
-                            pBar.Maximum = QRList.Count;
+                            pBar.Maximum = QRList.Count * 2;
                             pBar.Value = 1;
 
                             var tasks = new List<Task>();
@@ -71,17 +73,30 @@ namespace QRCodeXLS
                             {
                                 var task = Task.Run(async () =>
                                 {
-                                    using (var img = await Helpers.GenerateImageAsync(QR.NameAgr, QR.SerialNumber, QR.URL))
-                                        //img.Save(Path.Combine(folderPath, $"{img.Tag}.gif"), ImageFormat.Gif);
-                                        img.Save(Path.Combine(folderPath, $"{img.Tag}.jpg"), ImageFormat.Jpeg);
-                                    Invoke((MethodInvoker) delegate { pBar.PerformStep(); }); // Выполняет движение по прогрессбару в UI-потоке
+                                    using (var img = await Helpers.Helpers.GenerateImageAsync(QR.NameAgr,
+                                               QR.SerialNumber, QR.URL))
+                                    {
+                                        var pathJpg = Path.Combine(folderPath, $"{img.Tag}.jpeg");
+                                        img.Save(pathJpg, ImageFormat.Jpeg);
+                                    }
+
+                                    Invoke((MethodInvoker)delegate { pBar.PerformStep(); }); // Выполняет движение по прогрессбару в UI-потоке
                                 });
                                 tasks.Add(task);
                             }
 
                             await Task.WhenAll(tasks);
 
-                            MessageBox.Show($"В каталог {folderPath} сохранено {Directory.GetFiles(folderPath).Length} файлов.",
+                            // Vectorize использует static-поля класса Potrace, нельзя им пользоваться сразу в нескольких потоках
+                            foreach (var QR in QRList)
+                            {
+                                var inpath = Path.Combine(folderPath, $"{QR.NameAgr}_{QR.SerialNumber}.jpeg");
+                                var outpath = Path.Combine(folderPath, "svg", $"{QR.NameAgr}_{QR.SerialNumber}.svg");
+                                Helpers.Helpers.Vectorize(inpath, outpath);
+                                pBar.PerformStep();
+                            }
+
+                            MessageBox.Show($"В каталог {folderPath} сохранено {pBar.Value} файлов.",
                                             Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                             pBar.Value = 0;
                             Process.Start(new ProcessStartInfo("explorer.exe", folderPath)); // Открыть папку в эксплорере
@@ -92,7 +107,7 @@ namespace QRCodeXLS
             catch (Exception ex)
             {
                 MessageBox.Show("Ошибка при сохранении изображений этикеток!\n" +
-                                $"Причина: {ex.Message}", 
+                                $"Причина: {ex.Message}",
                                 "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally

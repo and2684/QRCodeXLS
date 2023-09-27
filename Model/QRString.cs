@@ -1,6 +1,6 @@
 ﻿using ExcelLibrary.SpreadSheet;
 
-namespace QRCodeXLS
+namespace QRCodeXLS.Model
 {
     public class QRString
     {

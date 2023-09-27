@@ -2,7 +2,7 @@
 {
     struct ImageConfig
     {
-        public int SizeMultiplyer { get; set; }
+        public int SizeMultiplier { get; set; }
         public int ImageWidth { get; set; }
         public int ImageHeight { get; set; }
         public int QRCodeSize { get; set; }

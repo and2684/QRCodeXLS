@@ -1,13 +1,18 @@
-﻿using ExcelLibrary.SpreadSheet;
+﻿using CsPotrace;
+using ExcelLibrary.SpreadSheet;
 using QRCoder;
 using QRCodeXLS.Config;
+using QRCodeXLS.Model;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
+using Font = System.Drawing.Font;
+using Image = System.Drawing.Image;
 
-namespace QRCodeXLS
+namespace QRCodeXLS.Helpers
 {
     public static class Helpers
     {
@@ -24,38 +29,38 @@ namespace QRCodeXLS
             }
         }
 
-        public static async Task<System.Drawing.Image> GenerateImageAsync(string nameAgr, string sn, string url)
+        public static async Task<Image> GenerateImageAsync(string nameAgr, string sn, string url)
         {
             var config = LoadConfigValues();
 
-            var SizeMultiplyer = config.SizeMultiplyer;
-            var ImageWidth = config.ImageWidth * SizeMultiplyer;
-            var ImageHeight = config.ImageHeight * SizeMultiplyer;
-            var QRCodeSize = config.QRCodeSize;
-            var QRCodeX = config.QRCodeX * SizeMultiplyer;
-            var QRCodeY = config.QRCodeY * SizeMultiplyer;
-            var QRCodeWidth = config.QRCodeWidth * SizeMultiplyer;
-            var QRCodeHeight = config.QRCodeHeight * SizeMultiplyer;
-            var RectangleAgrX = config.RectangleAgrX * SizeMultiplyer;
-            var RectangleAgrY = config.RectangleAgrY * SizeMultiplyer;
-            var RectangleAgrWidth = config.RectangleAgrWidth * SizeMultiplyer;
-            var RectangleAgrHeight = config.RectangleAgrHeight * SizeMultiplyer;
-            var RectangleSNX = config.RectangleSNX * SizeMultiplyer;
-            var RectangleSNY = config.RectangleSNY * SizeMultiplyer;
-            var RectangleSNWidth = config.RectangleSNWidth * SizeMultiplyer;
-            var RectangleSNHeight = config.RectangleSNHeight * SizeMultiplyer;
+            var sizeMultiplyer = config.SizeMultiplier;
+            var imageWidth = config.ImageWidth * sizeMultiplyer;
+            var imageHeight = config.ImageHeight * sizeMultiplyer;
+            var qrCodeSize = config.QRCodeSize;
+            var qrCodeX = config.QRCodeX * sizeMultiplyer;
+            var qrCodeY = config.QRCodeY * sizeMultiplyer;
+            var qrCodeWidth = config.QRCodeWidth * sizeMultiplyer;
+            var qrCodeHeight = config.QRCodeHeight * sizeMultiplyer;
+            var rectangleAgrX = config.RectangleAgrX * sizeMultiplyer;
+            var rectangleAgrY = config.RectangleAgrY * sizeMultiplyer;
+            var rectangleAgrWidth = config.RectangleAgrWidth * sizeMultiplyer;
+            var rectangleAgrHeight = config.RectangleAgrHeight * sizeMultiplyer;
+            var rectangleSnx = config.RectangleSNX * sizeMultiplyer;
+            var rectangleSny = config.RectangleSNY * sizeMultiplyer;
+            var rectangleSnWidth = config.RectangleSNWidth * sizeMultiplyer;
+            var rectangleSnHeight = config.RectangleSNHeight * sizeMultiplyer;
 
             var qrGenerator = new QRCodeGenerator();
             var qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
             var qrCode = new QRCode(qrCodeData);
-            using (var qrImage = qrCode.GetGraphic(QRCodeSize))
+            using (var qrImage = qrCode.GetGraphic(qrCodeSize))
             {
-                System.Drawing.Image imgFrame = new Bitmap(ImageWidth, ImageHeight, PixelFormat.Format24bppRgb);
+                Image imgFrame = new Bitmap(imageWidth, imageHeight, PixelFormat.Format24bppRgb);
 
                 Graphics.FromImage(imgFrame).FillRectangle(Brushes.White, 0, 0, imgFrame.Width, imgFrame.Height);
 
-                var drawFont = new Font("Arial", 20 * SizeMultiplyer);
-                var drawFontBottom = new Font("Arial", 24 * SizeMultiplyer, FontStyle.Bold);
+                var drawFont = new Font("Arial", 20 * sizeMultiplyer);
+                var drawFontBottom = new Font("Arial", 24 * sizeMultiplyer, FontStyle.Bold);
 
                 StringFormat drawFormat = StringFormat.GenericTypographic;
                 drawFormat.Alignment = StringAlignment.Center;
@@ -65,22 +70,22 @@ namespace QRCodeXLS
                 reservedRightsFormat.Alignment = StringAlignment.Far;
                 reservedRightsFormat.LineAlignment = StringAlignment.Center;
 
-                var rectangleAgr = new Rectangle(RectangleAgrX, RectangleAgrY, RectangleAgrWidth, RectangleAgrHeight);
-                var rectangleSN = new Rectangle(RectangleSNX, RectangleSNY, RectangleSNWidth, RectangleSNHeight);
+                var rectangleAgr = new Rectangle(rectangleAgrX, rectangleAgrY, rectangleAgrWidth, rectangleAgrHeight);
+                var rectangleSn = new Rectangle(rectangleSnx, rectangleSny, rectangleSnWidth, rectangleSnHeight);
 
                 using (Bitmap bmImage = new Bitmap(qrImage))
                 {
-                    bmImage.SetResolution(ImageWidth * 10 * SizeMultiplyer, ImageHeight * 10 * SizeMultiplyer);
+                    bmImage.SetResolution(imageWidth * 10 * sizeMultiplyer, imageHeight * 10 * sizeMultiplyer);
 
                     using (Graphics gFrame = Graphics.FromImage(imgFrame))
                     {
-                        gFrame.DrawImage(bmImage, QRCodeX, QRCodeY, QRCodeWidth, QRCodeHeight);
+                        gFrame.DrawImage(bmImage, qrCodeX, qrCodeY, qrCodeWidth, qrCodeHeight);
                         gFrame.DrawString(nameAgr, drawFont, Brushes.Black, rectangleAgr, drawFormat);
-                        gFrame.DrawString(sn, drawFontBottom, Brushes.Black, rectangleSN, drawFormat);
+                        gFrame.DrawString(sn, drawFontBottom, Brushes.Black, rectangleSn, drawFormat);
                         gFrame.DrawString("®", drawFontBottom, Brushes.Black, rectangleAgr, reservedRightsFormat);
 
-                        DrawFrame(Brushes.Black, 1 * SizeMultiplyer, rectangleAgr, gFrame);
-                        DrawFrame(Brushes.Black, 1 * SizeMultiplyer, rectangleSN, gFrame);
+                        DrawFrame(Brushes.Black, 1 * sizeMultiplyer, rectangleAgr, gFrame);
+                        DrawFrame(Brushes.Black, 1 * sizeMultiplyer, rectangleSn, gFrame);
                     }
                 }
 
@@ -117,26 +122,42 @@ namespace QRCodeXLS
 
         private static ImageConfig LoadConfigValues()
         {
-            ImageConfig config = new ImageConfig();
-
-            config.SizeMultiplyer = int.Parse(ConfigurationManager.AppSettings["SizeMultiplyer"]);
-            config.ImageWidth = int.Parse(ConfigurationManager.AppSettings["ImageWidth"]);
-            config.ImageHeight = int.Parse(ConfigurationManager.AppSettings["ImageHeight"]);
-            config.QRCodeSize = int.Parse(ConfigurationManager.AppSettings["QRCodeSize"]);
-            config.QRCodeX = int.Parse(ConfigurationManager.AppSettings["QRCodeX"]);
-            config.QRCodeY = int.Parse(ConfigurationManager.AppSettings["QRCodeY"]);
-            config.QRCodeWidth = int.Parse(ConfigurationManager.AppSettings["QRCodeWidth"]);
-            config.QRCodeHeight = int.Parse(ConfigurationManager.AppSettings["QRCodeHeight"]);
-            config.RectangleAgrX = int.Parse(ConfigurationManager.AppSettings["RectangleAgrX"]);
-            config.RectangleAgrY = int.Parse(ConfigurationManager.AppSettings["RectangleAgrY"]);
-            config.RectangleAgrWidth = int.Parse(ConfigurationManager.AppSettings["RectangleAgrWidth"]);
-            config.RectangleAgrHeight = int.Parse(ConfigurationManager.AppSettings["RectangleAgrHeight"]);
-            config.RectangleSNX = int.Parse(ConfigurationManager.AppSettings["RectangleSNX"]);
-            config.RectangleSNY = int.Parse(ConfigurationManager.AppSettings["RectangleSNY"]);
-            config.RectangleSNWidth = int.Parse(ConfigurationManager.AppSettings["RectangleSNWidth"]);
-            config.RectangleSNHeight = int.Parse(ConfigurationManager.AppSettings["RectangleSNHeight"]);
+            var config = new ImageConfig
+            {
+                SizeMultiplier = int.Parse(ConfigurationManager.AppSettings["SizeMultiplier"]),
+                ImageWidth = int.Parse(ConfigurationManager.AppSettings["ImageWidth"]),
+                ImageHeight = int.Parse(ConfigurationManager.AppSettings["ImageHeight"]),
+                QRCodeSize = int.Parse(ConfigurationManager.AppSettings["QRCodeSize"]),
+                QRCodeX = int.Parse(ConfigurationManager.AppSettings["QRCodeX"]),
+                QRCodeY = int.Parse(ConfigurationManager.AppSettings["QRCodeY"]),
+                QRCodeWidth = int.Parse(ConfigurationManager.AppSettings["QRCodeWidth"]),
+                QRCodeHeight = int.Parse(ConfigurationManager.AppSettings["QRCodeHeight"]),
+                RectangleAgrX = int.Parse(ConfigurationManager.AppSettings["RectangleAgrX"]),
+                RectangleAgrY = int.Parse(ConfigurationManager.AppSettings["RectangleAgrY"]),
+                RectangleAgrWidth = int.Parse(ConfigurationManager.AppSettings["RectangleAgrWidth"]),
+                RectangleAgrHeight = int.Parse(ConfigurationManager.AppSettings["RectangleAgrHeight"]),
+                RectangleSNX = int.Parse(ConfigurationManager.AppSettings["RectangleSNX"]),
+                RectangleSNY = int.Parse(ConfigurationManager.AppSettings["RectangleSNY"]),
+                RectangleSNWidth = int.Parse(ConfigurationManager.AppSettings["RectangleSNWidth"]),
+                RectangleSNHeight = int.Parse(ConfigurationManager.AppSettings["RectangleSNHeight"])
+            };
 
             return config;
+        }
+
+
+        public static void Vectorize(string inpath, string outpath)
+        {
+            var listOfPathes = new List<List<Curve>>();
+            var bm = Bitmap.FromFile(inpath) as Bitmap;
+            Potrace.Clear();
+            listOfPathes.Clear();
+            Potrace.Potrace_Trace(bm, listOfPathes);
+            string svg = Potrace.getSVG();
+            using (System.IO.StreamWriter W = new System.IO.StreamWriter(outpath))
+            {
+                W.WriteLine(svg);
+            }
         }
     }
 }
