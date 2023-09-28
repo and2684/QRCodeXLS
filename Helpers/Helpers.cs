@@ -1,6 +1,5 @@
 ﻿using CsPotrace;
 using ExcelLibrary.SpreadSheet;
-using Microsoft.Win32;
 using QRCoder;
 using QRCodeXLS.Config;
 using QRCodeXLS.Model;
@@ -10,7 +9,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Navigation;
 using Font = System.Drawing.Font;
 using Image = System.Drawing.Image;
 
@@ -35,23 +33,31 @@ namespace QRCodeXLS.Helpers
         {
             var config = LoadConfigValues();
 
-            var sizeMultiplyer = config.SizeMultiplier;
-            var imageWidth = config.ImageWidth * sizeMultiplyer;
-            var imageHeight = config.ImageHeight * sizeMultiplyer;
+            var sizeMultiplier = config.SizeMultiplier;
+            var imageWidth = config.ImageWidth * sizeMultiplier;
+            var imageHeight = config.ImageHeight * sizeMultiplier;
             var qrCodeSize = config.QRCodeSize;
             var qrCodeSizeMultiplier = config.QRCodeSizeMultiplier;
-            var qrCodeWidth = (int)(config.QRCodeWidth * qrCodeSizeMultiplier * sizeMultiplyer);
-            var qrCodeHeight = (int)(config.QRCodeHeight * qrCodeSizeMultiplier * sizeMultiplyer);
-            var qrCodeX = (config.QRCodeX * sizeMultiplyer) + (config.QRCodeWidth - qrCodeWidth) / 2;
-            var qrCodeY = (config.QRCodeY * sizeMultiplyer) + (config.QRCodeHeight - qrCodeHeight) / 2;
-            var rectangleAgrX = config.RectangleAgrX * sizeMultiplyer;
-            var rectangleAgrY = config.RectangleAgrY * sizeMultiplyer;
-            var rectangleAgrWidth = config.RectangleAgrWidth * sizeMultiplyer;
-            var rectangleAgrHeight = config.RectangleAgrHeight * sizeMultiplyer;
-            var rectangleSnx = config.RectangleSNX * sizeMultiplyer;
-            var rectangleSny = config.RectangleSNY * sizeMultiplyer;
-            var rectangleSnWidth = config.RectangleSNWidth * sizeMultiplyer;
-            var rectangleSnHeight = config.RectangleSNHeight * sizeMultiplyer;
+            var qrCodeWidth = (int)(config.QRCodeWidth * qrCodeSizeMultiplier * sizeMultiplier);
+            var qrCodeHeight = (int)(config.QRCodeHeight * qrCodeSizeMultiplier * sizeMultiplier);
+            // Рассчитываем новые координаты центра QR кода
+            float tempQrCodeCenterX = config.QRCodeX + (config.QRCodeWidth / 2);
+            float tempQrCodeCenterY = config.QRCodeY + (config.QRCodeWidth / 2);
+            // Рассчитываем новые координаты верхнего левого угла QR кода с учетом масштаба QR кода
+            float newQrCodeX = tempQrCodeCenterX - ((config.QRCodeWidth * qrCodeSizeMultiplier) / 2);
+            float newQrCodeY = tempQrCodeCenterY - ((config.QRCodeWidth * qrCodeSizeMultiplier) / 2);
+            // Рассчитываем новые координаты верхнего левого угла QR кода с учетом масштаба всего изображения
+            int qrCodeX = (int)(newQrCodeX * sizeMultiplier);
+            int qrCodeY = (int)(newQrCodeY * sizeMultiplier);
+
+            var rectangleAgrX = config.RectangleAgrX * sizeMultiplier;
+            var rectangleAgrY = config.RectangleAgrY * sizeMultiplier;
+            var rectangleAgrWidth = config.RectangleAgrWidth * sizeMultiplier;
+            var rectangleAgrHeight = config.RectangleAgrHeight * sizeMultiplier;
+            var rectangleSnx = config.RectangleSNX * sizeMultiplier;
+            var rectangleSny = config.RectangleSNY * sizeMultiplier;
+            var rectangleSnWidth = config.RectangleSNWidth * sizeMultiplier;
+            var rectangleSnHeight = config.RectangleSNHeight * sizeMultiplier;
 
             //MessageBox.Show($"qrCodeSizeMultiplier = {qrCodeSizeMultiplier} \n" +
             //                $"qrCodeWidth = {qrCodeWidth} \n" +
@@ -68,8 +74,8 @@ namespace QRCodeXLS.Helpers
 
                 Graphics.FromImage(imgFrame).FillRectangle(Brushes.White, 0, 0, imgFrame.Width, imgFrame.Height);
 
-                var drawFont = new Font("Arial", 20 * sizeMultiplyer);
-                var drawFontBottom = new Font("Arial", 24 * sizeMultiplyer, FontStyle.Bold);
+                var drawFont = new Font("Arial", 20 * sizeMultiplier);
+                var drawFontBottom = new Font("Arial", 24 * sizeMultiplier, FontStyle.Bold);
 
                 StringFormat drawFormat = StringFormat.GenericTypographic;
                 drawFormat.Alignment = StringAlignment.Center;
@@ -84,7 +90,7 @@ namespace QRCodeXLS.Helpers
 
                 using (Bitmap bmImage = new Bitmap(qrImage))
                 {
-                    bmImage.SetResolution(imageWidth * 10 * sizeMultiplyer, imageHeight * 10 * sizeMultiplyer);
+                    bmImage.SetResolution(imageWidth * 10 * sizeMultiplier, imageHeight * 10 * sizeMultiplier);
 
                     using (Graphics gFrame = Graphics.FromImage(imgFrame))
                     {
@@ -93,8 +99,8 @@ namespace QRCodeXLS.Helpers
                         gFrame.DrawString(sn, drawFontBottom, Brushes.Black, rectangleSn, drawFormat);
                         gFrame.DrawString("®", drawFontBottom, Brushes.Black, rectangleAgr, reservedRightsFormat);
 
-                        DrawFrame(Brushes.Black, 1 * sizeMultiplyer, rectangleAgr, gFrame);
-                        DrawFrame(Brushes.Black, 1 * sizeMultiplyer, rectangleSn, gFrame);
+                        DrawFrame(Brushes.Black, 1 * sizeMultiplier, rectangleAgr, gFrame);
+                        DrawFrame(Brushes.Black, 1 * sizeMultiplier, rectangleSn, gFrame);
                     }
                 }
 
@@ -159,7 +165,7 @@ namespace QRCodeXLS.Helpers
         public static void Vectorize(string inpath, string outpath)
         {
             var listOfPathes = new List<List<Curve>>();
-            var bm = Bitmap.FromFile(inpath) as Bitmap;
+            var bm = Image.FromFile(inpath) as Bitmap;
             Potrace.Clear();
             listOfPathes.Clear();
             Potrace.Potrace_Trace(bm, listOfPathes);
