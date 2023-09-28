@@ -5,6 +5,7 @@
         public int SizeMultiplier { get; set; }
         public int ImageWidth { get; set; }
         public int ImageHeight { get; set; }
+        public float QRCodeSizeMultiplier { get; set; }
         public int QRCodeSize { get; set; }
         public int QRCodeX { get; set; }
         public int QRCodeY { get; set; }

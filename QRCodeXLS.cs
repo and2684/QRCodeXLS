@@ -1,6 +1,7 @@
 ﻿using QRCodeXLS.Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
@@ -24,7 +25,7 @@ namespace QRCodeXLS
             {
                 using (var dialog = new OpenFileDialog())
                 {
-                    dialog.InitialDirectory = "c:\\";
+                    dialog.InitialDirectory = "C:\\";
                     dialog.Filter = "Файлы Excel (*.xls)|*.xls";
                     dialog.FilterIndex = 1;
                     dialog.RestoreDirectory = true;
@@ -58,15 +59,17 @@ namespace QRCodeXLS
                         // Создаем каталог куда будем складывать картинки
                         var folderPath = Path.Combine(dialog.SelectedPath, "QR_" + DateTime.Now.ToString("yyyyMMdd_hhmmss"));
                         Directory.CreateDirectory(folderPath);
-                        Directory.CreateDirectory(Path.Combine(folderPath, "svg"));
 
                         Helpers.Helpers.ReadExcel(XLSPath, QRList); // Читаем эксель
 
                         if (QRList.Count > 0)
                         {
                             // Подготовим Прогрессбар
-                            pBar.Maximum = QRList.Count * 2;
-                            pBar.Value = 1;
+                            
+                            pBar.Maximum = QRList.Count;
+                            if (int.Parse(ConfigurationManager.AppSettings["Makesvg"]) == 1)
+                                pBar.Maximum *= 2;
+                            pBar.Value = 0;
 
                             var tasks = new List<Task>();
                             foreach (var QR in QRList) // Генерируем картинки
@@ -88,12 +91,16 @@ namespace QRCodeXLS
                             await Task.WhenAll(tasks);
 
                             // Vectorize использует static-поля класса Potrace, нельзя им пользоваться сразу в нескольких потоках
-                            foreach (var QR in QRList)
+                            if (int.Parse(ConfigurationManager.AppSettings["Makesvg"]) == 1)
                             {
-                                var inpath = Path.Combine(folderPath, $"{QR.NameAgr}_{QR.SerialNumber}.jpeg");
-                                var outpath = Path.Combine(folderPath, "svg", $"{QR.NameAgr}_{QR.SerialNumber}.svg");
-                                Helpers.Helpers.Vectorize(inpath, outpath);
-                                pBar.PerformStep();
+                                Directory.CreateDirectory(Path.Combine(folderPath, "svg"));
+                                foreach (var QR in QRList)
+                                {
+                                    var inpath = Path.Combine(folderPath, $"{QR.NameAgr}_{QR.SerialNumber}.jpeg");
+                                    var outpath = Path.Combine(folderPath, "svg", $"{QR.NameAgr}_{QR.SerialNumber}.svg");
+                                    Helpers.Helpers.Vectorize(inpath, outpath);
+                                    pBar.PerformStep();
+                                }
                             }
 
                             MessageBox.Show($"В каталог {folderPath} сохранено {pBar.Value} файлов.",

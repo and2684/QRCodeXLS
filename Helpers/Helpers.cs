@@ -1,5 +1,6 @@
 ﻿using CsPotrace;
 using ExcelLibrary.SpreadSheet;
+using Microsoft.Win32;
 using QRCoder;
 using QRCodeXLS.Config;
 using QRCodeXLS.Model;
@@ -8,6 +9,7 @@ using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Navigation;
 using Font = System.Drawing.Font;
 using Image = System.Drawing.Image;
@@ -37,10 +39,11 @@ namespace QRCodeXLS.Helpers
             var imageWidth = config.ImageWidth * sizeMultiplyer;
             var imageHeight = config.ImageHeight * sizeMultiplyer;
             var qrCodeSize = config.QRCodeSize;
-            var qrCodeX = config.QRCodeX * sizeMultiplyer;
-            var qrCodeY = config.QRCodeY * sizeMultiplyer;
-            var qrCodeWidth = config.QRCodeWidth * sizeMultiplyer;
-            var qrCodeHeight = config.QRCodeHeight * sizeMultiplyer;
+            var qrCodeSizeMultiplier = config.QRCodeSizeMultiplier;
+            var qrCodeWidth = (int)(config.QRCodeWidth * qrCodeSizeMultiplier * sizeMultiplyer);
+            var qrCodeHeight = (int)(config.QRCodeHeight * qrCodeSizeMultiplier * sizeMultiplyer);
+            var qrCodeX = (config.QRCodeX * sizeMultiplyer) + (config.QRCodeWidth - qrCodeWidth) / 2;
+            var qrCodeY = (config.QRCodeY * sizeMultiplyer) + (config.QRCodeHeight - qrCodeHeight) / 2;
             var rectangleAgrX = config.RectangleAgrX * sizeMultiplyer;
             var rectangleAgrY = config.RectangleAgrY * sizeMultiplyer;
             var rectangleAgrWidth = config.RectangleAgrWidth * sizeMultiplyer;
@@ -49,6 +52,12 @@ namespace QRCodeXLS.Helpers
             var rectangleSny = config.RectangleSNY * sizeMultiplyer;
             var rectangleSnWidth = config.RectangleSNWidth * sizeMultiplyer;
             var rectangleSnHeight = config.RectangleSNHeight * sizeMultiplyer;
+
+            //MessageBox.Show($"qrCodeSizeMultiplier = {qrCodeSizeMultiplier} \n" +
+            //                $"qrCodeWidth = {qrCodeWidth} \n" +
+            //                $"qrCodeHeight = {qrCodeHeight} \n" +
+            //                $"qrCodeX = {qrCodeX} \n" + 
+            //                $"qrCodeY = {qrCodeY} \n");
 
             var qrGenerator = new QRCodeGenerator();
             var qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
@@ -128,6 +137,7 @@ namespace QRCodeXLS.Helpers
                 ImageWidth = int.Parse(ConfigurationManager.AppSettings["ImageWidth"]),
                 ImageHeight = int.Parse(ConfigurationManager.AppSettings["ImageHeight"]),
                 QRCodeSize = int.Parse(ConfigurationManager.AppSettings["QRCodeSize"]),
+                QRCodeSizeMultiplier = float.Parse(ConfigurationManager.AppSettings["QRCodeSizeMultiplier"]),
                 QRCodeX = int.Parse(ConfigurationManager.AppSettings["QRCodeX"]),
                 QRCodeY = int.Parse(ConfigurationManager.AppSettings["QRCodeY"]),
                 QRCodeWidth = int.Parse(ConfigurationManager.AppSettings["QRCodeWidth"]),
