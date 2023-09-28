@@ -170,9 +170,9 @@ namespace QRCodeXLS.Helpers
             listOfPathes.Clear();
             Potrace.Potrace_Trace(bm, listOfPathes);
             string svg = Potrace.getSVG();
-            using (System.IO.StreamWriter W = new System.IO.StreamWriter(outpath))
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(outpath))
             {
-                W.WriteLine(svg);
+                writer.WriteLine(svg);
             }
         }
     }
