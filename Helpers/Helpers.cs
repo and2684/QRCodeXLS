@@ -143,7 +143,7 @@ namespace QRCodeXLS.Helpers
                 ImageWidth = int.Parse(ConfigurationManager.AppSettings["ImageWidth"]),
                 ImageHeight = int.Parse(ConfigurationManager.AppSettings["ImageHeight"]),
                 QRCodeSize = int.Parse(ConfigurationManager.AppSettings["QRCodeSize"]),
-                QRCodeSizeMultiplier = float.Parse(ConfigurationManager.AppSettings["QRCodeSizeMultiplier"]),
+                QRCodeSizeMultiplier = float.Parse(ConfigurationManager.AppSettings["QRCodeSizeMultiplier"]) / 10,
                 QRCodeX = int.Parse(ConfigurationManager.AppSettings["QRCodeX"]),
                 QRCodeY = int.Parse(ConfigurationManager.AppSettings["QRCodeY"]),
                 QRCodeWidth = int.Parse(ConfigurationManager.AppSettings["QRCodeWidth"]),
